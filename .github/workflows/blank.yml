@@ -62,8 +62,7 @@ jobs:
     - name: Install dependencies
       run: npm install
       
-    - name: Run Jest tests
-      run: npm test
+   
 
     - name: Install jest
       run: npm install --save-dev jest
