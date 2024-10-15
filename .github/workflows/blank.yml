@@ -68,7 +68,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-results
-        path: reports/jest/junit.xml 
+        path: reports/jest-report.html
 
   npm-audit:
     runs-on: ubuntu-latest
