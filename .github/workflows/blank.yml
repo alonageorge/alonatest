@@ -64,11 +64,18 @@ jobs:
       
     - name: Run Jest tests
       run: npm test
+
+    - name: Install jest
+      run: npm install --save-dev jest
+
+    - name: jest test
+      run: npx jest --coverage
+      
     - name: Upload Jest test results
       uses: actions/upload-artifact@v3
       with:
         name: test-results
-        path: reports/jest-report.html
+        path: coverage
 
   npm-audit:
     runs-on: ubuntu-latest
