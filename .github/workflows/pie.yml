@@ -19,6 +19,6 @@ jobs:
         run: |
           gh workflow run test.yml \
             --repo ${{ github.repository }} \
-            --ref dev
+            --ref master
 
           echo "Test Dispatch workflow triggered!"
