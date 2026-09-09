@@ -3,7 +3,7 @@ name: PIE Agentic Automated Orchestration
 on:
   push:
     branches:
-      - dev
+      - master
 
 # Required so GITHUB_TOKEN can trigger another workflow
 permissions:
