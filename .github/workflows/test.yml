@@ -1,12 +1,19 @@
-name: Test Dispatch
+# .github/workflows/centralised-pipeline.yml
+
+name: Centralised Pipeline
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 jobs:
-  hello:
+  build-and-promote:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Hello
-        run: echo "Workflow 2 was triggered!"
+      - run: |
+          echo "Centralised pipeline started"
+         
