@@ -1,20 +1,24 @@
-name: Test Push
+name: New Pipeline
 
 on:
   push:
     branches:
       - master
 
-permissions:
-  actions: write
-
 jobs:
   trigger:
     runs-on: ubuntu-latest
 
+    permissions:
+      actions: write
+
     steps:
-      - name: Trigger Test Dispatch
-        
+      - name: Trigger test dispatch workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh workflow run test.yml --ref master
+          gh workflow run test-dispatch.yml \
+            --repo ${{ github.repository }} \
+            --ref dev
+
           echo "Test Dispatch workflow triggered!"
