@@ -1,106 +1,21 @@
-name: PIE Agentic Automated Orchestration
+name: Test Push
 
 on:
   push:
     branches:
-      - master
+      - dev
 
-# Required so GITHUB_TOKEN can trigger another workflow
 permissions:
   actions: write
-  contents: read
 
 jobs:
-
-  # ============================================================
-  # STEP 1 - Trigger Build & Promote workflow
-  # ============================================================
-  trigger_build_and_promote:
-
+  trigger:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Trigger Build and Promote Workflow
+      - name: Trigger Test Dispatch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-
-          echo "======================================"
-          echo "Triggering Build & Promote workflow"
-          echo "======================================"
-
-          gh workflow run build-and-promote-docker-image.yml \
-            --ref dev \
-            -f environment=dev
-
-          echo "Build & Promote workflow triggered."
-
-
-      # ========================================================
-      # STEP 2 - Wait for Build & Promote workflow
-      # ========================================================
-      - name: Wait for Build and Promote
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-
-          echo "Waiting for Build & Promote workflow..."
-
-          for i in {1..30}
-          do
-
-            echo ""
-            echo "Checking workflow status... Attempt $i"
-
-            RUN_ID=$(gh run list \
-              --workflow=build-and-promote-docker-image.yml \
-              --branch=dev \
-              --limit=1 \
-              --json databaseId \
-              --jq '.[0].databaseId')
-
-            if [ -z "$RUN_ID" ]; then
-              echo "Workflow run not found yet."
-              sleep 5
-              continue
-            fi
-
-            echo "Found workflow run: $RUN_ID"
-
-            STATUS=$(gh run view "$RUN_ID" \
-              --json status \
-              --jq '.status')
-
-            CONCLUSION=$(gh run view "$RUN_ID" \
-              --json conclusion \
-              --jq '.conclusion')
-
-            echo "Status: $STATUS"
-            echo "Conclusion: $CONCLUSION"
-
-            if [ "$STATUS" = "completed" ]; then
-
-              if [ "$CONCLUSION" = "success" ]; then
-                echo ""
-                echo "======================================"
-                echo "Build & Promote completed SUCCESSFULLY"
-                echo "======================================"
-                exit 0
-              else
-                echo ""
-                echo "======================================"
-                echo "Build & Promote FAILED"
-                echo "======================================"
-                exit 1
-              fi
-
-            fi
-
-            echo "Workflow still running..."
-            sleep 10
-
-          done
-
-          echo "Timed out waiting for Build & Promote"
-          exit 1
+          gh workflow run test-dispatch.yml --ref dev
+          echo "Test Dispatch workflow triggered!"
